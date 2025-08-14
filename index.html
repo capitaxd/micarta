@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carta Interactiva</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffe4e1 0%, #ffb6c1 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .envelope {
+            width: 700px;
+            height: 340px;
+            position: relative;
+            perspective: 1400px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(178,34,34,0.18), 0 1.5px 0 #b22222 inset;
+            border-radius: 24px;
+            background: #f9f6f2;
+        }
+        .flap {
+            width: 100%;
+            height: 55%;
+            background: linear-gradient(to bottom, #fff 80%, #ffe4e1 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-top-left-radius: 24px 32px;
+            border-top-right-radius: 24px 32px;
+            border: 2.5px solid #b22222;
+            border-bottom: none;
+            z-index: 2;
+            transform-origin: top center;
+            transition: transform 1s cubic-bezier(.77,0,.18,1.01);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            font-size: 2.2em;
+            color: #b22222;
+            background-image:
+            linear-gradient(135deg, #fff 80%, #ffe4e1 100%),
+            repeating-linear-gradient(-45deg, #f8d7da 0 6px, transparent 6px 12px);
+        }
+        .envelope.open .flap {
+            transform: rotateX(-120deg) translateY(-18px);
+        }
+        .body {
+            width: 100%;
+            height: 100%;
+            background: #fffdfa;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 24px;
+            border: 2.5px solid #b22222;
+            box-shadow: 0 8px 32px rgba(178,34,34,0.13);
+            z-index: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: box-shadow 0.5s;
+        }
+        .envelope.open .body {
+            z-index: 3;
+            box-shadow: 0 12px 48px rgba(178,34,34,0.18);
+        }
+        .body::before, .body::after {
+            content: '';
+            position: absolute;
+            width: 98%;
+            height: 18px;
+            left: 1%;
+            background: repeating-linear-gradient(-45deg, #f8d7da 0 6px, transparent 6px 12px);
+            opacity: 0.25;
+            border-radius: 0 0 18px 18px;
+        }
+        .body::before {
+            top: 0;
+        }
+        .body::after {
+            bottom: 0;
+            transform: scaleY(-1);
+        }
+        .envelope {
+            width: 700px;
+            height: 490 px;
+            position: relative;
+            perspective: 1200px;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+        .flap {
+            width: 100%;
+            height: 60%;
+            background: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border: 2px solid #ccc;
+            border-bottom: none;
+            z-index: 2;
+            transform-origin: top center;
+            transition: transform 1s cubic-bezier(.77,0,.18,1.01);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            font-size: 2em;
+            color: #b22222;
+            background: linear-gradient(to bottom, #fff 80%, #ffe4e1 100%);
+        }
+        .envelope.open .flap {
+            transform: rotateX(-120deg) translateY(-15px);
+        }
+        .body {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 20px;
+            border: 2px solid #ccc;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            z-index: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: box-shadow 0.5s;
+        }
+        .envelope.open .body {
+            z-index: 3;
+            box-shadow: 0 8px 32px rgba(178,34,34,0.15);
+        }
+        .message, .editable, .hearts, .chameleons, .avocados, .chameleons-corner {
+            opacity: 0;
+            transition: opacity 0.7s 0.5s;
+        }
+        .envelope.open .message,
+        .envelope.open .editable,
+        .envelope.open .hearts,
+        .envelope.open .chameleons,
+        .envelope.open .avocados,
+        .envelope.open .chameleons-corner {
+            opacity: 1;
+        }
+        .hearts {
+            font-size: 2em;
+            transform: scaleY(-1);
+            margin-bottom: 10px;
+        }
+        .chameleons {
+            font-size: 2em;
+            margin-top: 10px;
+        }
+        .chameleons-corner {
+            position: absolute;
+            font-size: 1.5em;
+            z-index: 4;
+            pointer-events: none;
+        }
+        .chameleon-tl { top: 8px; left: 8px; }
+        .chameleon-tr { top: 8px; right: 8px; }
+        .chameleon-bl { bottom: 8px; left: 8px; }
+        .chameleon-br { bottom: 8px; right: 8px; }
+        .avocados {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            position: absolute;
+            top: 10px;
+            left: 0;
+            padding: 0 18px;
+            pointer-events: none;
+            z-index: 5;
+        }
+        .avocado-emoji {
+            font-size: 1.3em;
+            filter: drop-shadow(0 1px 2px #e0e0e0);
+        }
+        .message {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #b22222;
+            text-align: center;
+        }
+        .editable {
+            padding: 15px;
+            border: 1px dashed #ccc;
+            border-radius: 10px;
+            min-height: 160px;
+            max-height: 200px;
+            width: 95%;
+            background: #fff;
+            font-size: 1.1em;
+            color: #333;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 10px;
+            text-align: center;
+            overflow-y: auto;
+        }
+        .envelope-label {
+            position: absolute;
+            bottom: 18px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 1.1em;
+            color: #b22222;
+            letter-spacing: 1px;
+            pointer-events: none;
+        }
+        @media (max-width: 400px) {
+            .envelope { width: 95vw; height: 60vw; min-height: 200px;}
+            .editable { min-height: 100px; max-height: 140px;}
+            .avocados { padding: 0 6vw;}
+        }
+    </style>
+</head>
+<body>
+    <div class="envelope" id="envelope">
+        <!-- Camaleones en las esquinas -->
+        <div class="chameleons-corner chameleon-tl">🦎</div>
+        <div class="chameleons-corner chameleon-tr">🦎</div>
+        <div class="chameleons-corner chameleon-bl">🦎</div>
+        <div class="chameleons-corner chameleon-br">🦎</div>
+        <!-- Aguacates a los lados -->
+        <div class="avocados">
+            <span class="avocado-emoji">🥑</span>
+            <span class="avocado-emoji">🥑</span>
+        </div>
+        <div class="flap">💌</div>
+        <div class="body">
+            <div class="hearts">💕💕💕</div>
+            <div class="message">Para mi amor</div>
+            <div class="editable" contenteditable="true">
+                hola mi amor, esta carta no la hago a mano porque soy muy malo para hacerlo y no tengo tanta creatividad perdóname por eso, quiero que sepas
+                que gracias por dejarme ser tu novio, por dejarme ser la primera persona en tener tu corazoncito, por darme la oportunidad de estar contigo,
+                por dejarme besarte, tocarte y quererte, perdón si he ido rápido en algunas cosas, pero así soy, ya me conoces, me gustas muchísimo 
+                y no tengas duda de eso, quiero que lo nuestro dure y sea bonito, gracias por hacerme sonreír, por hacerme sentir feliz y especial,
+                gracias por dejarme ver tu sonrisa, por ser lo suficientemente valiente para estar conmigo y dejarme ser parte de tu vida, por dejarme 
+                verte en ese lado tierno y amoroso que tienes, te quiero mucho(quieres ser mi novia?💖)
+            </div>
+            <div class="chameleons">🦎🦎</div>
+        </div>
+        <div class="envelope-label">Haz clic para abrir la carta</div>
+    </div>
+    <script>
+        document.getElementById('envelope').addEventListener('click', function() {
+            this.classList.add('open');
+        }, { once: true });
+    </script>
+</body>
+</html>
