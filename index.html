@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Carta Interactiva</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
             margin: 0;
@@ -15,8 +16,12 @@
             font-family: 'Segoe UI', sans-serif;
         }
         .envelope {
-            width: 700px;
-            height: 340px;
+            width: 90vw;
+            max-width: 700px;
+            height: 55vw;
+            max-height: 340px;
+            min-width: 260px;
+            min-height: 180px;
             position: relative;
             perspective: 1400px;
             cursor: pointer;
@@ -91,61 +96,6 @@
             bottom: 0;
             transform: scaleY(-1);
         }
-        .envelope {
-            width: 700px;
-            height: 490 px;
-            position: relative;
-            perspective: 1200px;
-            cursor: pointer;
-            margin-bottom: 30px;
-        }
-        .flap {
-            width: 100%;
-            height: 60%;
-            background: #fff;
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            border: 2px solid #ccc;
-            border-bottom: none;
-            z-index: 2;
-            transform-origin: top center;
-            transition: transform 1s cubic-bezier(.77,0,.18,1.01);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            font-size: 2em;
-            color: #b22222;
-            background: linear-gradient(to bottom, #fff 80%, #ffe4e1 100%);
-        }
-        .envelope.open .flap {
-            transform: rotateX(-120deg) translateY(-15px);
-        }
-        .body {
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-radius: 20px;
-            border: 2px solid #ccc;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            z-index: 1;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: box-shadow 0.5s;
-        }
-        .envelope.open .body {
-            z-index: 3;
-            box-shadow: 0 8px 32px rgba(178,34,34,0.15);
-        }
         .message, .editable, .hearts, .chameleons, .avocados, .chameleons-corner {
             opacity: 0;
             transition: opacity 0.7s 0.5s;
@@ -193,7 +143,7 @@
             filter: drop-shadow(0 1px 2px #e0e0e0);
         }
         .message {
-            font-size: 1.5em;
+            font-size: 1.2em;
             margin-bottom: 15px;
             color: #b22222;
             text-align: center;
@@ -202,11 +152,11 @@
             padding: 15px;
             border: 1px dashed #ccc;
             border-radius: 10px;
-            min-height: 160px;
-            max-height: 200px;
+            min-height: 80px;
+            max-height: 160px;
             width: 95%;
             background: #fff;
-            font-size: 1.1em;
+            font-size: 1em;
             color: #333;
             outline: none;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -220,15 +170,43 @@
             left: 0;
             width: 100%;
             text-align: center;
-            font-size: 1.1em;
+            font-size: 1em;
             color: #b22222;
             letter-spacing: 1px;
             pointer-events: none;
         }
+        @media (max-width: 600px) {
+            .envelope {
+                width: 98vw;
+                height: 65vw;
+                max-width: 100vw;
+                max-height: 80vw;
+                min-width: 180px;
+                min-height: 120px;
+            }
+            .flap {
+                font-size: 1.5em;
+            }
+            .body {
+                border-radius: 16px;
+            }
+            .editable {
+                min-height: 60px;
+                max-height: 100px;
+                font-size: 0.95em;
+            }
+            .message {
+                font-size: 1em;
+            }
+            .envelope-label {
+                font-size: 0.95em;
+            }
+        }
         @media (max-width: 400px) {
-            .envelope { width: 95vw; height: 60vw; min-height: 200px;}
-            .editable { min-height: 100px; max-height: 140px;}
+            .envelope { width: 98vw; height: 80vw; min-height: 100px;}
+            .editable { min-height: 40px; max-height: 70px; font-size: 0.9em;}
             .avocados { padding: 0 6vw;}
+            .message { font-size: 0.95em;}
         }
     </style>
 </head>
@@ -267,3 +245,4 @@
     </script>
 </body>
 </html>
+
